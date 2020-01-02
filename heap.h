@@ -28,6 +28,8 @@ typedef struct heap {
 
 void heap_init(heap *h, unsigned cap) {
   h->arr = calloc(cap, sizeof(kv));
+  h->cap = cap;
+  h->len = 0;
 }
 
 void heap_resize(heap *h, unsigned cap) {
@@ -109,14 +111,16 @@ void heap_insert(heap *h, kv *e) {
   heapify_up(h, idx_e0);
 }
 
-void heap_print(heap *h) {
+void heap_print(heap *h, unsigned k) {
 
   printf("heap: %p\n", (void*)h);
   if (NULL == h) return;
 
+  unsigned n = h->len;
+  if (k > 0) n = k;
   printf("len: %u, cap: %u\n",
     h->len, h->len);
-  for (unsigned i=0; i<h->len; i++)
+  for (unsigned i=0; i<n; i++)
     printf("[%d] k:%d, v:%f\n",
       i, h->arr[i].key, h->arr[i].val);
 }
@@ -125,3 +129,9 @@ void heap_release(heap *h) {
   free(h->arr); h->arr = NULL;
   h->cap = 0; h->len = 0;
 }
+
+//void heap_from_arr(kv *v, unsigned n) {
+//  for (unsigned i=n/2-1; i>=0; i--) {
+//    heapify_down(v, i);
+//  }
+//}
